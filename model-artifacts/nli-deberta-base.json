@@ -1,0 +1,23 @@
+{
+  "id": "cross-encoder/nli-deberta-v3-xsmall",
+  "sha": "a150876415327c80daeff35ca6f68f5ed8cf5c24",
+  "cardData": {
+    "language": "en",
+    "pipeline_tag": "zero-shot-classification",
+    "tags": [
+      "transformers"
+    ],
+    "datasets": [
+      "nyu-mll/multi_nli",
+      "stanfordnlp/snli"
+    ],
+    "metrics": [
+      "accuracy"
+    ],
+    "license": "apache-2.0",
+    "base_model": [
+      "microsoft/deberta-v3-xsmall"
+    ],
+    "library_name": "sentence-transformers"
+  }
+}

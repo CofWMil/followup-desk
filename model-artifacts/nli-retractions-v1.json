@@ -1,0 +1,508 @@
+{
+  "model": "Xenova/nli-deberta-v3-xsmall",
+  "revision": "2a4f614a701367a02d51389039afc998faeda637",
+  "modelBytes": 87246587,
+  "runtime": "Node CPU q8 two threads; not browser timing",
+  "loadMs": 10199.087309999999,
+  "cues": [
+    {
+      "id": "fit",
+      "strategyId": "measurement",
+      "label": "Review physical-fit uncertainty",
+      "hypothesis": "I am unsure whether the furniture will fit.",
+      "question": "Which product and access dimensions still need checking?",
+      "goal": "Compare verified product dimensions with the available space and access route."
+    },
+    {
+      "id": "delivery",
+      "strategyId": "delivery",
+      "label": "Review delivery-related requirements",
+      "hypothesis": "I have requirements about delivery.",
+      "question": "What delivery timing has the store actually verified?",
+      "goal": "Verify delivery feasibility before giving the customer a delivery answer."
+    },
+    {
+      "id": "price",
+      "strategyId": "comparison",
+      "label": "Review another store’s price",
+      "hypothesis": "Another store offers a different price.",
+      "question": "Are the compared products and included services equivalent?",
+      "goal": "Prepare a like-for-like comparison using verified prices and terms."
+    },
+    {
+      "id": "service",
+      "strategyId": "comparison",
+      "label": "Review delivery, installation or warranty interests",
+      "hypothesis": "Delivery, installation or warranty are important to me.",
+      "question": "Which delivery, installation and warranty terms are verified?",
+      "goal": "Prepare an accurate comparison of the relevant service terms."
+    },
+    {
+      "id": "comfort",
+      "strategyId": "comfort",
+      "label": "Review firmness and material preferences",
+      "hypothesis": "I want to compare the firmness and materials.",
+      "question": "Which comfort and material preferences matter most?",
+      "goal": "Prepare a factual comparison to help clarify comfort preferences."
+    }
+  ],
+  "thresholds": {
+    "entailment": 0.8,
+    "margin": 0.3,
+    "fullNoteContradictionVeto": 0.5
+  },
+  "results": [
+    {
+      "id": "resolved-later",
+      "text": "I was worried the sofa would not fit through my doorway. I have now checked the measurements and it fits perfectly; I do not need help with fit.",
+      "ms": 213.9827239999995,
+      "result": {
+        "method": "NLI",
+        "generative": false,
+        "needs": [],
+        "blockers": [
+          {
+            "text": "Review physical-fit uncertainty",
+            "quote": "I was worried the sofa would not fit through my doorway.",
+            "cueId": "fit",
+            "evidenceScore": 0.9612292673361086
+          }
+        ],
+        "unknowns": [
+          {
+            "text": "Which product and access dimensions still need checking?",
+            "quote": "I was worried the sofa would not fit through my doorway.",
+            "cueId": "fit",
+            "source": "template"
+          }
+        ],
+        "stage": null,
+        "nextGoal": {
+          "text": "Compare verified product dimensions with the available space and access route.",
+          "quote": "I was worried the sofa would not fit through my doorway.",
+          "source": "template"
+        },
+        "strategyId": "measurement",
+        "analysisStatus": "suggestions",
+        "thresholds": {
+          "entailment": 0.8,
+          "margin": 0.3,
+          "fullNoteContradictionVeto": 0.5
+        },
+        "summary": "NLI found passages relevant to preparation. Questions and strategy are fixed reviewable templates. Read the full note before adopting; no stage, budget, date or contact permission was inferred.",
+        "scores": [
+          {
+            "cueId": "fit",
+            "hypothesis": "I am unsure whether the furniture will fit.",
+            "quote": "I was worried the sofa would not fit through my doorway.",
+            "support": {
+              "contradiction": 0.0009277180182799399,
+              "entailment": 0.9612292673361086,
+              "neutral": 0.037843014645611656
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.014529005233120375,
+              "entailment": 0.957148912680046,
+              "neutral": 0.028322082086833646
+            },
+            "accepted": true
+          },
+          {
+            "cueId": "delivery",
+            "hypothesis": "I have requirements about delivery.",
+            "quote": "I was worried the sofa would not fit through my doorway.",
+            "support": {
+              "contradiction": 0.001338865217348966,
+              "entailment": 0.013789006621464848,
+              "neutral": 0.9848721281611862
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.1876936013791349,
+              "entailment": 0.02817223641844467,
+              "neutral": 0.7841341622024205
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "price",
+            "hypothesis": "Another store offers a different price.",
+            "quote": "I was worried the sofa would not fit through my doorway.",
+            "support": {
+              "contradiction": 0.007779112402750667,
+              "entailment": 0.005736269602755599,
+              "neutral": 0.9864846179944936
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.011057188058728865,
+              "entailment": 0.0005010893650918118,
+              "neutral": 0.9884417225761793
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "service",
+            "hypothesis": "Delivery, installation or warranty are important to me.",
+            "quote": "I was worried the sofa would not fit through my doorway.",
+            "support": {
+              "contradiction": 0.003111201340604566,
+              "entailment": 0.00862164188238885,
+              "neutral": 0.9882671567770067
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.01827472731875282,
+              "entailment": 0.0013594503099133594,
+              "neutral": 0.9803658223713339
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "comfort",
+            "hypothesis": "I want to compare the firmness and materials.",
+            "quote": "I was worried the sofa would not fit through my doorway.",
+            "support": {
+              "contradiction": 0.01565829350604792,
+              "entailment": 0.003380876549354407,
+              "neutral": 0.9809608299445977
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.40343198243449413,
+              "entailment": 0.0010689615045411838,
+              "neutral": 0.5954990560609646
+            },
+            "accepted": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "resolved-same-sentence",
+      "text": "I checked the doorway measurements and am no longer worried about getting the sofa through the door.",
+      "ms": 131.7739840000013,
+      "result": {
+        "method": "NLI",
+        "generative": false,
+        "needs": [],
+        "blockers": [],
+        "unknowns": [],
+        "stage": null,
+        "nextGoal": null,
+        "strategyId": "clarify",
+        "analysisStatus": "no-supported-cues",
+        "thresholds": {
+          "entailment": 0.8,
+          "margin": 0.3,
+          "fullNoteContradictionVeto": 0.5
+        },
+        "summary": "No preparation cue passed the conservative check. This is an abstention, not evidence that the customer has no needs. Review manually.",
+        "scores": [
+          {
+            "cueId": "fit",
+            "hypothesis": "I am unsure whether the furniture will fit.",
+            "quote": "I checked the doorway measurements and am no longer worried about getting the sofa through the door.",
+            "support": {
+              "contradiction": 0.06067928188004854,
+              "entailment": 0.18687302527380592,
+              "neutral": 0.7524476928461454
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.06067928188004854,
+              "entailment": 0.18687302527380592,
+              "neutral": 0.7524476928461454
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "delivery",
+            "hypothesis": "I have requirements about delivery.",
+            "quote": "I checked the doorway measurements and am no longer worried about getting the sofa through the door.",
+            "support": {
+              "contradiction": 0.6009358299797818,
+              "entailment": 0.01773448911918028,
+              "neutral": 0.381329680901038
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.6009358299797818,
+              "entailment": 0.01773448911918028,
+              "neutral": 0.381329680901038
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "price",
+            "hypothesis": "Another store offers a different price.",
+            "quote": "I checked the doorway measurements and am no longer worried about getting the sofa through the door.",
+            "support": {
+              "contradiction": 0.00680589753204909,
+              "entailment": 0.0012607895500267013,
+              "neutral": 0.9919333129179241
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.00680589753204909,
+              "entailment": 0.0012607895500267013,
+              "neutral": 0.9919333129179241
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "service",
+            "hypothesis": "Delivery, installation or warranty are important to me.",
+            "quote": "I checked the doorway measurements and am no longer worried about getting the sofa through the door.",
+            "support": {
+              "contradiction": 0.014784137075916609,
+              "entailment": 0.003991749826507454,
+              "neutral": 0.9812241130975761
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.014784137075916609,
+              "entailment": 0.003991749826507454,
+              "neutral": 0.9812241130975761
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "comfort",
+            "hypothesis": "I want to compare the firmness and materials.",
+            "quote": "I checked the doorway measurements and am no longer worried about getting the sofa through the door.",
+            "support": {
+              "contradiction": 0.010395986642148873,
+              "entailment": 0.0023808605435397313,
+              "neutral": 0.9872231528143115
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.010395986642148873,
+              "entailment": 0.0023808605435397313,
+              "neutral": 0.9872231528143115
+            },
+            "accepted": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "retracted-comparison",
+      "text": "I asked for a firmness and materials comparison last week. I have now chosen and bought a mattress and no longer need a comparison.",
+      "ms": 161.96705199999997,
+      "result": {
+        "method": "NLI",
+        "generative": false,
+        "needs": [
+          {
+            "text": "Review firmness and material preferences",
+            "quote": "I asked for a firmness and materials comparison last week.",
+            "cueId": "comfort",
+            "evidenceScore": 0.9868745742139413
+          }
+        ],
+        "blockers": [],
+        "unknowns": [
+          {
+            "text": "Which comfort and material preferences matter most?",
+            "quote": "I asked for a firmness and materials comparison last week.",
+            "cueId": "comfort",
+            "source": "template"
+          }
+        ],
+        "stage": null,
+        "nextGoal": {
+          "text": "Prepare a factual comparison to help clarify comfort preferences.",
+          "quote": "I asked for a firmness and materials comparison last week.",
+          "source": "template"
+        },
+        "strategyId": "comfort",
+        "analysisStatus": "suggestions",
+        "thresholds": {
+          "entailment": 0.8,
+          "margin": 0.3,
+          "fullNoteContradictionVeto": 0.5
+        },
+        "summary": "NLI found passages relevant to preparation. Questions and strategy are fixed reviewable templates. Read the full note before adopting; no stage, budget, date or contact permission was inferred.",
+        "scores": [
+          {
+            "cueId": "fit",
+            "hypothesis": "I am unsure whether the furniture will fit.",
+            "quote": "I asked for a firmness and materials comparison last week.",
+            "support": {
+              "contradiction": 0.007097015763928595,
+              "entailment": 0.0042897384993224015,
+              "neutral": 0.988613245736749
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.5015326302177312,
+              "entailment": 0.0009346796061335606,
+              "neutral": 0.49753269017613533
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "delivery",
+            "hypothesis": "I have requirements about delivery.",
+            "quote": "I asked for a firmness and materials comparison last week.",
+            "support": {
+              "contradiction": 0.01848943933662006,
+              "entailment": 0.04752278993548721,
+              "neutral": 0.9339877707278929
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.8354998966002218,
+              "entailment": 0.016132792572264205,
+              "neutral": 0.148367310827514
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "price",
+            "hypothesis": "Another store offers a different price.",
+            "quote": "I asked for a firmness and materials comparison last week.",
+            "support": {
+              "contradiction": 0.014200174090181207,
+              "entailment": 0.006908451587064161,
+              "neutral": 0.9788913743227545
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.03441801310632912,
+              "entailment": 0.0008493369665084195,
+              "neutral": 0.9647326499271623
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "service",
+            "hypothesis": "Delivery, installation or warranty are important to me.",
+            "quote": "I asked for a firmness and materials comparison last week.",
+            "support": {
+              "contradiction": 0.008695156721141047,
+              "entailment": 0.015218591443874208,
+              "neutral": 0.9760862518349847
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.717832432877501,
+              "entailment": 0.0034326491463763215,
+              "neutral": 0.27873491797612276
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "comfort",
+            "hypothesis": "I want to compare the firmness and materials.",
+            "quote": "I asked for a firmness and materials comparison last week.",
+            "support": {
+              "contradiction": 0.0005268837088695762,
+              "entailment": 0.9868745742139413,
+              "neutral": 0.012598542077189127
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.0012316407713351004,
+              "entailment": 0.9854249823630337,
+              "neutral": 0.013343376865631145
+            },
+            "accepted": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "no-service-interest",
+      "text": "I do not care about delivery, installation or warranty, and I do not want a comparison.",
+      "ms": 108.53268399999979,
+      "result": {
+        "method": "NLI",
+        "generative": false,
+        "needs": [],
+        "blockers": [],
+        "unknowns": [],
+        "stage": null,
+        "nextGoal": null,
+        "strategyId": "clarify",
+        "analysisStatus": "no-supported-cues",
+        "thresholds": {
+          "entailment": 0.8,
+          "margin": 0.3,
+          "fullNoteContradictionVeto": 0.5
+        },
+        "summary": "No preparation cue passed the conservative check. This is an abstention, not evidence that the customer has no needs. Review manually.",
+        "scores": [
+          {
+            "cueId": "fit",
+            "hypothesis": "I am unsure whether the furniture will fit.",
+            "quote": "I do not care about delivery, installation or warranty, and I do not want a comparison.",
+            "support": {
+              "contradiction": 0.017427266096792092,
+              "entailment": 0.0015086364966695335,
+              "neutral": 0.9810640974065384
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.017427266096792092,
+              "entailment": 0.0015086364966695335,
+              "neutral": 0.9810640974065384
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "delivery",
+            "hypothesis": "I have requirements about delivery.",
+            "quote": "I do not care about delivery, installation or warranty, and I do not want a comparison.",
+            "support": {
+              "contradiction": 0.997355762614181,
+              "entailment": 0.0007676647920103691,
+              "neutral": 0.001876572593808671
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.997355762614181,
+              "entailment": 0.0007676647920103691,
+              "neutral": 0.001876572593808671
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "price",
+            "hypothesis": "Another store offers a different price.",
+            "quote": "I do not care about delivery, installation or warranty, and I do not want a comparison.",
+            "support": {
+              "contradiction": 0.004712730977795975,
+              "entailment": 0.0016675673349308782,
+              "neutral": 0.9936197016872731
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.004712730977795975,
+              "entailment": 0.0016675673349308782,
+              "neutral": 0.9936197016872731
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "service",
+            "hypothesis": "Delivery, installation or warranty are important to me.",
+            "quote": "I do not care about delivery, installation or warranty, and I do not want a comparison.",
+            "support": {
+              "contradiction": 0.9976557010108437,
+              "entailment": 0.0007644530577900793,
+              "neutral": 0.0015798459313662073
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.9976557010108437,
+              "entailment": 0.0007644530577900793,
+              "neutral": 0.0015798459313662073
+            },
+            "accepted": false
+          },
+          {
+            "cueId": "comfort",
+            "hypothesis": "I want to compare the firmness and materials.",
+            "quote": "I do not care about delivery, installation or warranty, and I do not want a comparison.",
+            "support": {
+              "contradiction": 0.9795122346609928,
+              "entailment": 0.00035246146914556787,
+              "neutral": 0.020135303869861603
+            },
+            "fullNoteSupport": {
+              "contradiction": 0.9795122346609928,
+              "entailment": 0.00035246146914556787,
+              "neutral": 0.020135303869861603
+            },
+            "accepted": false
+          }
+        ]
+      }
+    }
+  ]
+}

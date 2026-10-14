@@ -1,0 +1,264 @@
+{
+  "name": "Sam Rivera",
+  "notes": "I like this washer-dryer set, but another store is $500 cheaper. Price is not my only concern. I want to compare installation and warranty coverage. You promised to text me the breakdown yesterday.",
+  "status": "suggestions",
+  "strategy": "comparison",
+  "scores": [
+    {
+      "cueId": "fit",
+      "hypothesis": "I am unsure whether the furniture will fit.",
+      "quote": "I like this washer-dryer set, but another store is $500 cheaper.",
+      "support": {
+        "contradiction": 0.08092571711463899,
+        "entailment": 0.004596323861777587,
+        "neutral": 0.9144779590235834
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.13953632676238822,
+        "entailment": 0.010601971270221442,
+        "neutral": 0.8498617019673904
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "delivery",
+      "hypothesis": "I have requirements about delivery.",
+      "quote": "I want to compare installation and warranty coverage.",
+      "support": {
+        "contradiction": 0.7447678659149427,
+        "entailment": 0.02852366748045441,
+        "neutral": 0.2267084666046029
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.051242793217762796,
+        "entailment": 0.09394822701933295,
+        "neutral": 0.8548089797629043
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "price",
+      "hypothesis": "Another store offers a different price.",
+      "quote": "I like this washer-dryer set, but another store is $500 cheaper.",
+      "support": {
+        "contradiction": 0.0007750809937630404,
+        "entailment": 0.981584126406508,
+        "neutral": 0.01764079259972901
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.0004952296887051992,
+        "entailment": 0.9855459758189062,
+        "neutral": 0.01395879449238846
+      },
+      "accepted": true
+    },
+    {
+      "cueId": "service",
+      "hypothesis": "Delivery, installation or warranty are important to me.",
+      "quote": "I want to compare installation and warranty coverage.",
+      "support": {
+        "contradiction": 0.019209052927300532,
+        "entailment": 0.14087962456004072,
+        "neutral": 0.8399113225126588
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.01289008879285684,
+        "entailment": 0.6629651691608088,
+        "neutral": 0.32414474204633426
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "comfort",
+      "hypothesis": "I want to compare the firmness and materials.",
+      "quote": "I like this washer-dryer set, but another store is $500 cheaper.",
+      "support": {
+        "contradiction": 0.019262052016077696,
+        "entailment": 0.008189131003556213,
+        "neutral": 0.972548816980366
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.645893890330199,
+        "entailment": 0.0024052489663172424,
+        "neutral": 0.3517008607034837
+      },
+      "accepted": false
+    }
+  ]
+}
+{
+  "name": "Jordan Lee",
+  "notes": "I like this three-seat sofa, but I am worried it will not fit through the doorway or that the living room will feel cramped. Around $8,000 maximum. Text me Wednesday evening to remind me to measure. I cannot take calls.",
+  "status": "no-supported-cues",
+  "strategy": "clarify",
+  "scores": [
+    {
+      "cueId": "fit",
+      "hypothesis": "I am unsure whether the furniture will fit.",
+      "quote": "I like this three-seat sofa, but I am worried it will not fit through the doorway or that the living room will feel cramped.",
+      "support": {
+        "contradiction": 0.0010302096173863164,
+        "entailment": 0.9832985594014512,
+        "neutral": 0.01567123098116266
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.6429328999464776,
+        "entailment": 0.12241812969816558,
+        "neutral": 0.2346489703553569
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "delivery",
+      "hypothesis": "I have requirements about delivery.",
+      "quote": "I like this three-seat sofa, but I am worried it will not fit through the doorway or that the living room will feel cramped.",
+      "support": {
+        "contradiction": 0.005570572876945499,
+        "entailment": 0.02431150058449759,
+        "neutral": 0.9701179265385569
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.013059745560575714,
+        "entailment": 0.05046943298575683,
+        "neutral": 0.9364708214536674
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "price",
+      "hypothesis": "Another store offers a different price.",
+      "quote": "I cannot take calls.",
+      "support": {
+        "contradiction": 0.007730305328814221,
+        "entailment": 0.005589247232133362,
+        "neutral": 0.9866804474390524
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.014375303050507346,
+        "entailment": 0.0014808307073503478,
+        "neutral": 0.9841438662421425
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "service",
+      "hypothesis": "Delivery, installation or warranty are important to me.",
+      "quote": "Text me Wednesday evening to remind me to measure.",
+      "support": {
+        "contradiction": 0.009927807929308795,
+        "entailment": 0.018504777620190403,
+        "neutral": 0.9715674144505008
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.6455793196814231,
+        "entailment": 0.00707231735429618,
+        "neutral": 0.3473483629642807
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "comfort",
+      "hypothesis": "I want to compare the firmness and materials.",
+      "quote": "Text me Wednesday evening to remind me to measure.",
+      "support": {
+        "contradiction": 0.002939762157589027,
+        "entailment": 0.0020034633074798793,
+        "neutral": 0.9950567745349311
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.5836386887196258,
+        "entailment": 0.00429017761786571,
+        "neutral": 0.41207113366250847
+      },
+      "accepted": false
+    }
+  ]
+}
+{
+  "name": "Casey Brooks",
+  "notes": "I am just exploring mattresses. The two I tried felt quite different, and I do not know which I prefer. I did not say I would buy by month-end and have not set a budget. You can text me a firmness and materials comparison on Saturday afternoon. Do not ask me every day.",
+  "status": "suggestions",
+  "strategy": "comfort",
+  "scores": [
+    {
+      "cueId": "fit",
+      "hypothesis": "I am unsure whether the furniture will fit.",
+      "quote": "I am just exploring mattresses.",
+      "support": {
+        "contradiction": 0.013670018570706714,
+        "entailment": 0.010434882133404237,
+        "neutral": 0.9758950992958891
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.022074634820136062,
+        "entailment": 0.16345671631832093,
+        "neutral": 0.814468648861543
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "delivery",
+      "hypothesis": "I have requirements about delivery.",
+      "quote": "I did not say I would buy by month-end and have not set a budget.",
+      "support": {
+        "contradiction": 0.017467034640509693,
+        "entailment": 0.019250935026070212,
+        "neutral": 0.9632820303334202
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.007114101352038587,
+        "entailment": 0.02441485435997964,
+        "neutral": 0.9684710442879818
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "price",
+      "hypothesis": "Another store offers a different price.",
+      "quote": "I am just exploring mattresses.",
+      "support": {
+        "contradiction": 0.00944216946140809,
+        "entailment": 0.00620783607148915,
+        "neutral": 0.9843499944671027
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.008644262360904419,
+        "entailment": 0.010266594413959176,
+        "neutral": 0.9810891432251364
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "service",
+      "hypothesis": "Delivery, installation or warranty are important to me.",
+      "quote": "You can text me a firmness and materials comparison on Saturday afternoon.",
+      "support": {
+        "contradiction": 0.009476257249905319,
+        "entailment": 0.020360549105103206,
+        "neutral": 0.9701631936449916
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.008253754704158095,
+        "entailment": 0.01924484273564432,
+        "neutral": 0.9725014025601976
+      },
+      "accepted": false
+    },
+    {
+      "cueId": "comfort",
+      "hypothesis": "I want to compare the firmness and materials.",
+      "quote": "You can text me a firmness and materials comparison on Saturday afternoon.",
+      "support": {
+        "contradiction": 0.0004121158233805158,
+        "entailment": 0.8760034629681087,
+        "neutral": 0.12358442120851067
+      },
+      "fullNoteSupport": {
+        "contradiction": 0.004960623726514629,
+        "entailment": 0.49185847627928275,
+        "neutral": 0.5031808999942027
+      },
+      "accepted": true
+    }
+  ]
+}
