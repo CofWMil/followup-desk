@@ -1,0 +1,28 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {validateAI,isContactable,buildPlan,applyOutcome,queueGroup,revision} from '../src/core.js';
+const text='I like this three-seat sofa, but I worry about doorway clearance. Text me Wednesday evening to measure.';
+const valid={needs:[{text:'Interested in a three-seat sofa',quote:'I like this three-seat sofa'}],unknowns:[{text:'What is the clear doorway width?',quote:'I worry about doorway clearance'}],blockers:[{text:'Doorway clearance is uncertain',quote:'I worry about doorway clearance'}],stage:{text:'Checking fit',quote:'I worry about doorway clearance'},nextGoal:{text:'Get doorway measurements before checking delivery feasibility',quote:'Text me Wednesday evening to measure'}};
+const customer=()=>({id:'safety-test',name:'Synthetic customer',notes:text,category:'Sofa',budget:'',timing:'',constraints:'',consent:'yes',channel:'Text message',stage:'Checking fit',history:[]});
+
+test('AI contract preserves object-shaped unknowns, stage and nextGoal',()=>{const a=validateAI(valid,text);assert.equal(a.unknowns.length,1,'Object-shaped unknowns must not be silently discarded');assert.equal(a.stage,'Checking fit');assert.equal(a.goal,valid.nextGoal.text);});
+test('Empty object is not successful AI inference',()=>assert.throws(()=>validateAI({},text)));
+test('Array is not an AI object',()=>assert.throws(()=>validateAI([],text)));
+test('Missing required schema arrays must fail visibly',()=>assert.throws(()=>validateAI({needs:valid.needs},text)));
+test('Invented source quote cannot become a displayed fact',()=>{const a=validateAI({...valid,needs:[{text:'Stock is available',quote:'Stock is available'}]},text);assert.equal(a.facts.length,0);assert.ok(a.discarded>=1);});
+test('No-contact source text blocks even a stale yes field',()=>{const c={...customer(),notes:'Do not contact me. Wait for me to reach out.',consent:'yes',stage:'Next step agreed'};assert.equal(isContactable(c),false);assert.equal(buildPlan(c).draft,'');});
+test('Unknown contact permission blocks drafts',()=>{const c={...customer(),consent:'unknown'};assert.equal(isContactable(c),false);assert.equal(buildPlan(c).draft,'');});
+test('No-response does not automatically reduce customer stage',()=>{const c=customer();assert.equal(applyOutcome(c,{kind:'No reply',note:'No reply'}).stage,c.stage);});
+test('No-contact result clears prior plan and prevents queue contact',()=>{const c=customer();c.plan={...buildPlan(c),date:'2026-10-13',confirmed:true,sourceRevision:revision(c)};const after=applyOutcome(c,{kind:'Do not contact'});assert.equal(after.plan,null);assert.equal(queueGroup(after,'2026-10-13'),'paused');});
+test('Editing customer text invalidates accepted plan',()=>{const c=customer();c.plan={...buildPlan(c),date:'2026-10-13',confirmed:true,sourceRevision:revision(c)};c.notes+='New note: timing to be agreed.';assert.equal(queueGroup(c,'2026-10-13'),'review');});
+test('A future confirmed appointment stays future',()=>{const c=customer();c.plan={...buildPlan(c),date:'2026-10-14',confirmed:true,sourceRevision:revision(c)};assert.equal(queueGroup(c,'2026-10-13'),'future');});
+test('Standalone explicit Do not contact blocks stale yes consent',()=>{assert.equal(isContactable({...customer(),notes:'Renovation delayed. Do not contact me.'}),false);});
+test('Explicit temporary no-contact blocks stale yes consent',()=>{assert.equal(isContactable({...customer(),notes:'Please do not contact me until I decide.'}),false);});
+test('Explicit cannot take calls blocks phone channel',()=>{assert.equal(isContactable({...customer(),notes:'Text me only. I cannot take calls.',channel:'Phone'}),false);});
+test('Plan channel mismatch cannot silently enter contact queue',()=>{const c=customer();c.plan={...buildPlan(c),channel:'Phone',date:'2026-10-13',confirmed:true,sourceRevision:revision(c)};assert.equal(queueGroup(c,'2026-10-13'),'review');});
+test('English no-contact overrides stale consent',()=>{assert.equal(isContactable({...customer(),notes:"Do not contact me for now. I'll reach out myself."}),false);});
+test('English contraction no-contact overrides stale consent',()=>{assert.equal(isContactable({...customer(),notes:"Don't contact me until I reach out."}),false);});
+test('English no-calls overrides phone channel',()=>{assert.equal(isContactable({...customer(),notes:'Text me Wednesday. Do not call me.',channel:'Phone'}),false);});
+test('English text-only overrides phone channel',()=>{assert.equal(isContactable({...customer(),notes:'Text only, please.',channel:'Phone'}),false);});
+test('Curly-apostrophe no-contact overrides stale consent',()=>{assert.equal(isContactable({...customer(),notes:'Don’t contact me. I’ll get back to you.'}),false);});
+test('Explicit email-only blocks text channel',()=>{assert.equal(isContactable({...customer(),notes:'Email only, please.',channel:'Text message'}),false);});
