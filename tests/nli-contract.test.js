@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {analyzeNLI,CUES,THRESHOLDS,sentencesOf} from '../src/ai.worker.js';
+function fakeTokenizer(text,options={}){return {text,hypothesis:options.text_pair,input_ids:{dims:[1,text.length>1000?401:30]}}}
+function fakeModel(logits){const model=async inputs=>({logits:{data:logits(inputs)}});model.config={id2label:{0:'contradiction',1:'entailment',2:'neutral'}};return model}
+// These are deterministic contract tests, not evidence of model accuracy.
+test('NLI contract: unsupported output abstains instead of inferring no need',async()=>{const r=await analyzeNLI('I am browsing.',fakeTokenizer,fakeModel(()=>[-3,-3,4]));assert.equal(r.analysisStatus,'no-supported-cues');assert.deepEqual(r.needs,[]);assert.deepEqual(r.blockers,[]);assert.equal(r.stage,null);assert.equal(r.nextGoal,null);assert.match(r.summary,/not evidence.*no needs/)});
+test('NLI contract: accepted fit cue retains exact source and a disclosed template',async()=>{const text='I worry the sofa will not fit.';const r=await analyzeNLI(text,fakeTokenizer,fakeModel(x=>x.hypothesis.includes('furniture')?[-4,4,-4]:[-4,-4,4]));assert.equal(r.strategyId,'measurement');assert.equal(r.blockers[0].quote,text);assert.equal(r.unknowns[0].source,'template');assert.equal(r.nextGoal.source,'template');assert.equal(r.stage,null);assert.equal(r.generative,false)});
+test('NLI contract: full-note contradiction vetoes isolated historical sentence cue',async()=>{const text='I worried about fit. It fits now.';const r=await analyzeNLI(text,fakeTokenizer,fakeModel(x=>x.text===text?[5,-5,-5]:[-5,5,-5]));assert.equal(r.analysisStatus,'no-supported-cues')});
+test('NLI contract: limits reject without silently truncating',async()=>{await assert.rejects(()=>analyzeNLI('',fakeTokenizer,fakeModel(()=>[])));await assert.rejects(()=>analyzeNLI('x'.repeat(1801),fakeTokenizer,fakeModel(()=>[])),/1800/);await assert.rejects(()=>analyzeNLI('x'.repeat(1001),fakeTokenizer,fakeModel(()=>[])),/context/)});
+test('NLI topics do not include sales likelihood, inferred wealth, dates, or permission',()=>{assert.deepEqual(CUES.map(x=>x.id),['fit','delivery','price','service','comfort']);assert.ok(THRESHOLDS.entailment>=.8);assert.deepEqual(sentencesOf('Do not call me. Text only.'),['Do not call me.','Text only.'])});
