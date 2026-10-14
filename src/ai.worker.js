@@ -1,0 +1,35 @@
+import {AutoTokenizer,AutoModelForSequenceClassification,env} from '@huggingface/transformers';
+export const MODEL_ID='Xenova/nli-deberta-v3-xsmall';
+export const MODEL_REVISION='2a4f614a701367a02d51389039afc998faeda637';
+export const MODEL_BYTES=87246587;
+export const THRESHOLDS={entailment:0.80,margin:0.30,fullNoteContradictionVeto:0.50};
+export const CUES=[
+ {id:'fit',strategyId:'measurement',label:'Review physical-fit uncertainty',hypothesis:'I am unsure whether the furniture will fit.',question:'Which product and access dimensions still need checking?',goal:'Compare verified product dimensions with the available space and access route.'},
+ {id:'delivery',strategyId:'delivery',label:'Review delivery-related requirements',hypothesis:'I have requirements about delivery.',question:'What delivery timing has the store actually verified?',goal:'Verify delivery feasibility before giving the customer a delivery answer.'},
+ {id:'price',strategyId:'comparison',label:'Review another store’s price',hypothesis:'Another store offers a different price.',question:'Are the compared products and included services equivalent?',goal:'Prepare a like-for-like comparison using verified prices and terms.'},
+ {id:'service',strategyId:'comparison',label:'Review delivery, installation or warranty interests',hypothesis:'Delivery, installation or warranty are important to me.',question:'Which delivery, installation and warranty terms are verified?',goal:'Prepare an accurate comparison of the relevant service terms.'},
+ {id:'comfort',strategyId:'comfort',label:'Review firmness and material preferences',hypothesis:'I want to compare the firmness and materials.',question:'Which comfort and material preferences matter most?',goal:'Prepare a factual comparison to help clarify comfort preferences.'}
+];
+export const MODEL_INFO={id:MODEL_ID,revision:MODEL_REVISION,dtype:'q8',method:'NLI',generative:false,runtime:'ONNX Runtime WASM',cueVersion:'en-preparation-v1',thresholds:THRESHOLDS};
+env.allowLocalModels=false;env.backends.onnx.wasm.numThreads=1;
+const ortBase='https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/';
+env.backends.onnx.wasm.wasmPaths={mjs:ortBase+'ort-wasm-simd-threaded.asyncify.mjs',wasm:ortBase+'ort-wasm-simd-threaded.asyncify.wasm'};
+export function sentencesOf(text){return Array.from(new Intl.Segmenter('en',{granularity:'sentence'}).segment(text),x=>x.segment.trim()).filter(Boolean);}
+export async function analyzeNLI(text,tokenizer,model,progress=()=>{}){
+ if(typeof text!=='string'||!text.trim())throw new Error('Add a customer note first.');
+ if(text.length>1800)throw new Error('Analyze up to 1800 characters at a time. Split longer notes; the original note was not truncated.');
+ const sentences=sentencesOf(text);if(sentences.length>20)throw new Error('Analyze up to 20 sentences at a time. Split longer notes.');
+ const tokenCount=tokenizer(text,{truncation:false}).input_ids.dims.at(-1);if(tokenCount>400)throw new Error('This note exceeds the local model context. Split it into shorter notes; no text was silently omitted.');
+ const scores=[];let done=0;const total=CUES.length*(sentences.length+1);
+ async function score(premise,hypothesis){const output=await model(tokenizer(premise,{text_pair:hypothesis,truncation:false}));const logits=Array.from(output.logits.data),max=Math.max(...logits),exp=logits.map(x=>Math.exp(x-max)),sum=exp.reduce((a,b)=>a+b,0);const labels=Object.fromEntries(exp.map((v,i)=>[String(model.config.id2label[i]).toLowerCase(),v/sum]));if(!['entailment','neutral','contradiction'].every(k=>Number.isFinite(labels[k])))throw new Error('Unexpected NLI label configuration.');progress(++done,total);return labels;}
+ for(const cue of CUES){const full=await score(text,cue.hypothesis);let best=null;for(const quote of sentences){const support=await score(quote,cue.hypothesis);if(!best||support.entailment>best.support.entailment)best={quote,support};}const s=best.support;const accepted=s.entailment>=THRESHOLDS.entailment&&s.entailment-Math.max(s.neutral,s.contradiction)>=THRESHOLDS.margin&&full.contradiction<THRESHOLDS.fullNoteContradictionVeto;scores.push({cueId:cue.id,hypothesis:cue.hypothesis,quote:best.quote,support:s,fullNoteSupport:full,accepted});}
+ const passed=scores.filter(x=>x.accepted);const byId=new Map(CUES.map(x=>[x.id,x]));const evidence=passed.map(x=>({text:byId.get(x.cueId).label,quote:x.quote,cueId:x.cueId,evidenceScore:x.support.entailment}));
+ // A fixed, disclosed preparation mapping. These are not LLM-generated facts or plans.
+ const priority=['fit','service','price','comfort','delivery'];const chosen=priority.map(id=>passed.find(x=>x.cueId===id)).find(Boolean);const cue=chosen&&byId.get(chosen.cueId);
+ return {method:'NLI',generative:false,needs:evidence.filter(x=>x.cueId!=='fit'),blockers:evidence.filter(x=>x.cueId==='fit'),unknowns:passed.map(x=>({text:byId.get(x.cueId).question,quote:x.quote,cueId:x.cueId,source:'template'})),stage:null,nextGoal:cue?{text:cue.goal,quote:chosen.quote,source:'template'}:null,strategyId:cue?.strategyId||'clarify',analysisStatus:passed.length?'suggestions':'no-supported-cues',thresholds:THRESHOLDS,summary:passed.length?'NLI found passages relevant to preparation. Questions and strategy are fixed reviewable templates. Read the full note before adopting; no stage, budget, date or contact permission was inferred.':'No preparation cue passed the conservative check. This is an abstention, not evidence that the customer has no needs. Review manually.',scores};
+}
+let tokenizer,model,loading,busy=false;
+if(typeof self!=='undefined')self.onmessage=async({data})=>{
+ if(!['analyze','load'].includes(data.type))return;const {id}=data;const post=x=>self.postMessage({id,...x});if(busy){post({type:'error',error:'An analysis is already running. Please wait.'});return;}busy=true;
+ try{const start=performance.now();if(!model){post({type:'progress',phase:'loading',text:'Downloading an 87 MB English NLI model plus tokenizer and runtime. Notes are analyzed locally.'});loading||=Promise.all([AutoTokenizer.from_pretrained(MODEL_ID,{revision:MODEL_REVISION}),AutoModelForSequenceClassification.from_pretrained(MODEL_ID,{revision:MODEL_REVISION,dtype:'q8',device:'wasm',progress_callback:p=>post({type:'progress',phase:'loading',file:p.file,progress:p.progress,text:p.status==='progress'?`Downloading ${p.file}: ${Math.round(p.progress||0)}%`:`Loading ${p.file||p.status}`})})]).catch(error=>{loading=null;throw error;});[tokenizer,model]=await loading;}const loaded=performance.now();if(data.type==='load'){post({type:'ready',model:MODEL_INFO,loadMs:loaded-start});return;}const result=await analyzeNLI(data.text,tokenizer,model,(done,total)=>post({type:'progress',phase:'inference',progress:done/total*100,text:`Checking evidence locally: ${done}/${total}`}));post({type:'result',result,model:{...MODEL_INFO,loadMs:loaded-start,inferenceMs:performance.now()-loaded}});}catch(error){post({type:'error',error:error.message||String(error),model:MODEL_INFO});}finally{busy=false;}
+};
