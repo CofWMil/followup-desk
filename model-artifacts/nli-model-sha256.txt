@@ -1,0 +1,1 @@
+3fac2500c45c75af42c7711de0d1b93d59577456100208be0dc1f9e8811946b6  onnx/model_quantized.onnx
